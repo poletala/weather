@@ -18,6 +18,14 @@ const getCurrentTimeDate = () => {
 }
 getCurrentTimeDate()
 
+function appFetch(url, options) {
+    return fetch(url, options)
+    .then(resp => resp.json())
+    .catch(err => {
+        throw new Error(err)
+    })
+}
+
 function getWeatherByLocation(lat, lon) {
     const API_KEY = "6fbeb34c010c544f6f33fa8071fc677a"
     return appFetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&cnt=${'5'}&units=${'metric'}`)
@@ -39,3 +47,5 @@ function getWeatherByMyLocation() {
     navigator.geolocation.getCurrentPosition(onSuccessLocation, onErrorLocation)
 }
 window.onload = getWeatherByMyLocation
+
+
