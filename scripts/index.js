@@ -1,5 +1,5 @@
 const temp = document.querySelector('.temp')
-const location = document.querySelector('.location')
+const myLocation = document.querySelector('.location')
 const date = document.querySelector('.time-date')
 
 const getCurrentTimeDate = () => {
@@ -38,7 +38,7 @@ function getWeatherByMyLocation() {
                 console.log(data)
                 console.log('Temp: ', data.list[0].main.temp, 'City: ', data.city.name)
                 temp.innerHTML = data.list[0].main.temp
-                location.innerHTML = data.city.name
+                myLocation.innerHTML = data.city.name
         })
     }
     const onErrorLocation = (err) => {
