@@ -23,6 +23,7 @@ getWeatherByMyLocationButton.addEventListener('click', () => {
         getWeatherByLocation(position.coords.latitude, position.coords.longitude)
         .then(data => {
             console.log(data)
+            console.log('Temp: ', data.list[0].main.temp, 'City: ', data.city.name)
             console.log('First weather timestamp: ', new DataTransfer(data.list[0].dt))
         })
     }
