@@ -42,9 +42,9 @@ function getWeatherByLocation(lat, lon) {
     return appFetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&cnt=${'5'}&units=${'metric'}`)
 }
 
-function getWeather() {
+// function getWeather() {
 
-}
+// }
 
 function appFetch(url, options) {
     return fetch(url, options)
