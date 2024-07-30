@@ -1,5 +1,5 @@
 const temp = document.querySelector('.temp')
-const myLocation = document.querySelector('.location')
+const mylocation = document.querySelector('.location')
 const date = document.querySelector('.time-date')
 
 const getCurrentTimeDate = () => {
@@ -37,8 +37,8 @@ function getWeatherByMyLocation() {
             .then(data => {
                 console.log(data)
                 console.log('Temp: ', data.list[0].main.temp, 'City: ', data.city.name)
-                temp.innerHTML = data.list[0].main.temp
-                myLocation.innerHTML = data.city.name
+                temp.innerHTML = `${Math.round(data.list[0].main.temp)}°`
+                mylocation.innerHTML = data.city.name
         })
     }
     const onErrorLocation = (err) => {
@@ -46,6 +46,5 @@ function getWeatherByMyLocation() {
     }
     navigator.geolocation.getCurrentPosition(onSuccessLocation, onErrorLocation)
 }
-window.onload = getWeatherByMyLocation
-
+getWeatherByMyLocation()
 
