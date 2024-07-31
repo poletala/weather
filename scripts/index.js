@@ -1,6 +1,12 @@
 const temp = document.querySelector('.temp')
 const mylocation = document.querySelector('.location')
 const date = document.querySelector('.time-date')
+const tempMax = document.querySelector('.temp-max')
+const tempMin = document.querySelector('.temp-min')
+const humidity = document.querySelector('.humidity')
+const cloudy = document.querySelector('.cloudy')
+const wind = document.querySelector('.wind')
+const searchLocationInput = document.querySelector('.search-by-city')
 
 const getCurrentTimeDate = () => {
     let currentTimeDate = new Date();
@@ -28,8 +34,9 @@ function appFetch(url, options) {
 
 function getWeatherByLocation(lat, lon) {
     const API_KEY = "6fbeb34c010c544f6f33fa8071fc677a"
-    return appFetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&cnt=${'5'}&units=${'metric'}`)
+    return appFetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&cnt=${'1'}&units=${'metric'}`)
 }
+
 
 function getWeatherByMyLocation() {
     const onSuccessLocation = (position) => {
@@ -39,6 +46,11 @@ function getWeatherByMyLocation() {
                 console.log('Temp: ', data.list[0].main.temp, 'City: ', data.city.name)
                 temp.innerHTML = `${Math.round(data.list[0].main.temp)}°`
                 mylocation.innerHTML = data.city.name
+                tempMax.innerHTML = `${data.list[0].main.temp_max}°`
+                tempMin.innerHTML = `${data.list[0].main.temp_min}°`
+                humidity.innerHTML = `${data.list[0].main.humidity}%`
+                cloudy.innerHTML = `${data.list[0].clouds.all}%`
+                wind.innerHTML = `${data.list[0].wind.speed}km/h`
         })
     }
     const onErrorLocation = (err) => {
@@ -48,3 +60,35 @@ function getWeatherByMyLocation() {
 }
 getWeatherByMyLocation()
 
+function getWeatherByCity(city) {
+    const API_KEY = "6fbeb34c010c544f6f33fa8071fc677a"
+    return appFetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}`)
+}
+
+function checkInput() {
+    if (!searchLocationInput.value) {
+        alert('Field is empty.')
+        return false
+    }
+    else return true
+
+}
+
+searchLocationInput.addEventListener('input', event => {
+    if (checkInput()) {
+    let cityName = searchLocationInput.value.trim()
+    getWeatherByCity(cityName)
+        .then(data => {
+            console.log(data)
+            temp.innerHTML = `${Math.round(data.list[0].main.temp)}°`
+            mylocation.innerHTML = data.city.name
+            tempMax.innerHTML = `${data.list[0].main.temp_max}°`
+            tempMin.innerHTML = `${data.list[0].main.temp_min}°`
+            humidity.innerHTML = `${data.list[0].main.humidity}%`
+            cloudy.innerHTML = `${data.list[0].clouds.all}%`
+            wind.innerHTML = `${data.list[0].wind.speed}km/h`
+        })
+        const onErrorCityName = (err) => {
+        console.log(err)
+        }
+}})
