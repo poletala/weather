@@ -74,7 +74,8 @@ function checkInput() {
 
 }
 
-searchLocationInput.addEventListener('input', event => {
+searchLocationInput.addEventListener('change', event => {
+    e.preventDefault()
     if (checkInput()) {
     let cityName = searchLocationInput.value.trim()
     getWeatherByCity(cityName)
