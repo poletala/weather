@@ -58,11 +58,11 @@ function getWeatherByMyLocation() {
     }
     navigator.geolocation.getCurrentPosition(onSuccessLocation, onErrorLocation)
 }
-getWeatherByMyLocation()
+window.onload = getWeatherByMyLocation
 
 function getWeatherByCity(city) {
     const API_KEY = "6fbeb34c010c544f6f33fa8071fc677a"
-    return appFetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}`)
+    return appFetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=${'metric'}`)
 }
 
 function checkInput() {
@@ -80,13 +80,11 @@ searchLocationInput.addEventListener('input', event => {
     getWeatherByCity(cityName)
         .then(data => {
             console.log(data)
-            temp.innerHTML = `${Math.round(data.list[0].main.temp)}°`
-            mylocation.innerHTML = data.city.name
-            tempMax.innerHTML = `${data.list[0].main.temp_max}°`
-            tempMin.innerHTML = `${data.list[0].main.temp_min}°`
-            humidity.innerHTML = `${data.list[0].main.humidity}%`
-            cloudy.innerHTML = `${data.list[0].clouds.all}%`
-            wind.innerHTML = `${data.list[0].wind.speed}km/h`
+            tempMax.innerHTML = `${Math.round(data.main.temp_max)}°`
+            tempMin.innerHTML = `${Math.round(data.main.temp_min)}°`
+            humidity.innerHTML = `${data.main.humidity}%`
+            cloudy.innerHTML = `${data.clouds.all}%`
+            wind.innerHTML = `${data.wind.speed}km/h`
         })
         const onErrorCityName = (err) => {
         console.log(err)
