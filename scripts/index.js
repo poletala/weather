@@ -75,9 +75,12 @@ function checkInput() {
 }
 
 searchLocationInput.addEventListener('change', event => {
-    e.preventDefault()
+    event.preventDefault()
     if (checkInput()) {
-    let cityName = searchLocationInput.value.trim()
+    let cityName = searchLocationInput.value.trim() 
+    cityName = cityName.charAt(0).toUpperCase() + cityName.slice(1)
+    document.querySelector('.weather-by-searching').innerHTML = `Weather in ${cityName}`
+    console.log(`Weather in ${cityName}`)
     getWeatherByCity(cityName)
         .then(data => {
             console.log(data)
@@ -86,6 +89,7 @@ searchLocationInput.addEventListener('change', event => {
             humidity.innerHTML = `${data.main.humidity}%`
             cloudy.innerHTML = `${data.clouds.all}%`
             wind.innerHTML = `${data.wind.speed}km/h`
+            
         })
         const onErrorCityName = (err) => {
         console.log(err)
