@@ -31,12 +31,35 @@ function appFetch(url, options) {
         throw new Error(err)
     })
 }
-
 function getWeatherByLocation(lat, lon) {
     const API_KEY = "6fbeb34c010c544f6f33fa8071fc677a"
     return appFetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&cnt=${'1'}&units=${'metric'}`)
 }
 
+function savedWeather() {
+    let citiesSavedInLS = JSON.parse(localStorage.getItem('Cities'))
+    console.log(citiesSavedInLS)
+    for (let i=0;i<citiesSavedInLS.length;i++) {
+        console.log(citiesSavedInLS[i])
+        getWeatherByCity(citiesSavedInLS[i])  
+            .then(data => {
+                console.log(`${citiesSavedInLS[i]} ${Math.round(data.main.temp)}°`)
+                let weatherSavedDiv = document.createElement('div')
+                weatherSavedDiv.classList.add('cities-saved-weather-box')
+                document.querySelector('.cities-saved').append(weatherSavedDiv)
+                let citySavedP = document.createElement('p')
+                let weatherSavedP = document.createElement('p')
+                document.weatherSavedDiv.append(citySavedP)
+                document.weatherSavedDiv.append(weatherSavedP)
+                citySavedP.innerHTML = `${citiesSavedInLS[i]}`
+                weatherSavedP.innerHTML = `$${Math.round(data.main.temp)}°`   
+        })
+        const onErrorCityName = (err) => {
+        console.log(err)
+        }
+    }   
+}
+savedWeather()
 
 function getWeatherByMyLocation() {
     const onSuccessLocation = (position) => {
@@ -46,11 +69,15 @@ function getWeatherByMyLocation() {
                 console.log('Temp: ', data.list[0].main.temp, 'City: ', data.city.name)
                 temp.innerHTML = `${Math.round(data.list[0].main.temp)}°`
                 mylocation.innerHTML = data.city.name
-                tempMax.innerHTML = `${data.list[0].main.temp_max}°`
-                tempMin.innerHTML = `${data.list[0].main.temp_min}°`
+                tempMax.innerHTML = `${Math.round(data.list[0].main.temp_max)}°`
+                tempMin.innerHTML = `${Math.round(data.list[0].main.temp_min)}°`
                 humidity.innerHTML = `${data.list[0].main.humidity}%`
                 cloudy.innerHTML = `${data.list[0].clouds.all}%`
                 wind.innerHTML = `${data.list[0].wind.speed}km/h`
+                if (!JSON.parse(localStorage.getItem('Cities'))) {
+                    let citiesSaved = [data.city.name]
+                    localStorage.setItem('Cities', JSON.stringify(citiesSaved))
+                }      
         })
     }
     const onErrorLocation = (err) => {
@@ -71,16 +98,16 @@ function checkInput() {
         return false
     }
     else return true
-
 }
 
 searchLocationInput.addEventListener('change', event => {
-    event.preventDefault()
+    let citiesSavedInLS = JSON.parse(localStorage.getItem('Cities'))
     if (checkInput()) {
-    let cityName = searchLocationInput.value.trim() 
+    let cityName = searchLocationInput.value.trim().toLowerCase()
     cityName = cityName.charAt(0).toUpperCase() + cityName.slice(1)
     document.querySelector('.weather-by-searching').innerHTML = `Weather in ${cityName}`
     console.log(`Weather in ${cityName}`)
+    
     getWeatherByCity(cityName)
         .then(data => {
             console.log(data)
@@ -88,10 +115,20 @@ searchLocationInput.addEventListener('change', event => {
             tempMin.innerHTML = `${Math.round(data.main.temp_min)}°`
             humidity.innerHTML = `${data.main.humidity}%`
             cloudy.innerHTML = `${data.clouds.all}%`
-            wind.innerHTML = `${data.wind.speed}km/h`
-            
+            wind.innerHTML = `${data.wind.speed}km/h`   
+            if (citiesSavedInLS.length > 6) {
+                let usersAnswer = confirm(`You can only keep six cities' weather information. Do you want to delete first?`)
+                if(usersAnswer) {
+                    citiesSavedInLS.shift()
+                    citiesSavedInLS.push(cityName)
+                    localStorage.setItem('Cities', JSON.stringify(citiesSavedInLS))
+                } else {
+                    alert(`${cityName}' weather will not be saved.`)
+                }
+            }
         })
         const onErrorCityName = (err) => {
         console.log(err)
+        alert('Wrong city name.')
         }
 }})
