@@ -142,8 +142,13 @@ searchLocationInput.addEventListener('change', event => {
 
 function mainInfStyle() {
     let citiesSavedInLS = JSON.parse(localStorage.getItem('Cities'))
-    if (citiesSavedInLS.length < 4) {
+    if (!citiesSavedInLS) {
         document.querySelector('.main-information').style.bottom = '200px'
+    } 
+    if (citiesSavedInLS) {
+        if (citiesSavedInLS.length < 4) {
+        document.querySelector('.main-information').style.bottom = '200px'
+        }
     }
 }
 mainInfStyle()
