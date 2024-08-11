@@ -118,7 +118,7 @@ searchLocationInput.addEventListener('change', event => {
             humidity.innerHTML = `${data.main.humidity}%`
             cloudy.innerHTML = `${data.clouds.all}%`
             wind.innerHTML = `${data.wind.speed}km/h`   
-            if (citiesSavedInLS.length < 7) {
+            if (citiesSavedInLS.length < 6) {
                 citiesSavedInLS.push(cityName)
                 localStorage.setItem('Cities', JSON.stringify(citiesSavedInLS))
             }
