@@ -132,3 +132,12 @@ searchLocationInput.addEventListener('change', event => {
         alert('Wrong city name.')
         }
 }})
+
+
+function mainInfStyle() {
+    let citiesSavedInLS = JSON.parse(localStorage.getItem('Cities'))
+    if (citiesSavedInLS.length < 5) {
+        document.querySelector('.main-information').style.bottom = '200px'
+    }
+}
+mainInfStyle()
