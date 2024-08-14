@@ -91,10 +91,13 @@ function savedWeather() { //отображение погоды для горо�
             console.log(citiesSavedInLS[i])
             getWeatherByCity(citiesSavedInLS[i])  
                 .then(data => {
-                    console.log(`${citiesSavedInLS[i]} temp ${Math.round(data.main.temp)}° wind ${data.wind.speed}`)
-                    let weatherIcon = (data.weather.main === 'Snow') ? 'snow' :
-                            (data.weather.main === 'Rain') ? 'rain' :
-                            (data.weather.main === 'Clouds') ? 'cloud' : 'sun';
+                    console.log(data)
+                    console.log(data.weather[0].main === 'Clear')
+                    console.log(`${citiesSavedInLS[i]} temp ${Math.round(data.main.temp)}° wind ${data.wind.speed} weather${data.weather[0].main}`)
+                    let weatherIcon = (data.weather[0].main === 'Snow') ? 'snow' :
+                        (data.weather[0].main === 'Rain') ? 'rain' :
+                        (data.weather[0].main === 'Clouds') ? 'cloud' :
+                        (data.weather[0].main === 'Clear') ? 'sun' : 'cloud';
                     let htmlSavedCityBox = `<div class="city-saved-container">
                             <div class="weather-icon ${weatherIcon}"></div>
                             <div class="cities-saved-weather-box">
@@ -152,10 +155,10 @@ searchLocationInput.addEventListener('change', event => {
             humidity.innerHTML = `${data.main.humidity}%`
             cloudy.innerHTML = `${data.clouds.all}%`
             wind.innerHTML = `${data.wind.speed}km/h`   
-            let weatherIcon = (data.weather.main === 'Snow') ? 'snow' :
-                             (data.weather.main === 'Rain') ? 'rain' :
-                              (data.weather.main === 'Clouds') ? 'cloud' :
-                              (data.weather.main === 'Clear') ? 'sun' : 'sun';
+            let weatherIcon = (data.weather[0].main === 'Snow') ? 'snow' :
+                             (data.weather[0].main === 'Rain') ? 'rain' :
+                              (data.weather[0].main === 'Clouds') ? 'cloud' :
+                              (data.weather[0].main === 'Clear') ? 'sun' : 'cloud';
                         let htmlSavedCityBox = `<div class="city-saved-container">
                              <div class="weather-icon ${weatherIcon}"></div>
                              <div class="cities-saved-weather-box">
