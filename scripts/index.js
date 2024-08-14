@@ -77,14 +77,25 @@ function cityNameCorrectView(string) { //корректное написание
     }
     return correctArrayOfCityName.join(' ')
 }
+function styleChange() {
+    let citiesSavedInLS = JSON.parse(localStorage.getItem('Cities'))
+    let citiesOnPage = document.querySelector('.cities-saved')
+    if (citiesSavedInLS) {
+        if (citiesSavedInLS.length >= 7) {
+            document.querySelector('.main-information').style = 'order: 0'
+            citiesOnPage.style = 'flex-direction: unset; height: unset'
+        }
+    }
+    if (!citiesSavedInLS) {
+        console.log('LS is clear')
+    }
+    
+}
+styleChange()
 
 function savedWeather() { //отображение погоды для городов из хранилища
     let citiesSavedInLS = JSON.parse(localStorage.getItem('Cities'))
     let citiesOnPage = document.querySelector('.cities-saved')
-    if (citiesSavedInLS.length >= 8) {
-        document.querySelector('.main-information').style = 'order: 0'
-        citiesOnPage.style = 'flex-direction: unset; height: unset'
-    }
     console.log(citiesSavedInLS)
     if(citiesSavedInLS) {
         for (let i=0;i<citiesSavedInLS.length;i++) {
@@ -133,10 +144,13 @@ function checkInput() {
         alert('Field is empty.')
         return false
     }
-    if (citiesSavedInLS.includes(cityName)) { //если введенный город есть на странице
-        alert(`${cityName} weather is on page.`)
-        return false
-    }
+    if (citiesSavedInLS && citiesSavedInLS.includes(cityName)) {
+       //если введенный город есть на странице
+            alert(`${cityName} weather is on page.`)
+            return false
+        }
+    
+    
     else return true
 }
 
@@ -145,7 +159,7 @@ searchLocationInput.addEventListener('change', event => {
     let citiesOnPage = document.querySelector('.cities-saved')
     if (checkInput()) {
     let cityName = cityNameCorrectView(searchLocationInput.value)
-    document.querySelector('.weather-by-searching').innerHTML = `Weather in ${cityName}`//////
+    document.querySelector('.weather-by-searching').innerHTML = `Weather in ${cityName}`
     console.log(`Search weather in ${cityName}`)
     getWeatherByCity(cityName)
         .then(data => {
@@ -164,7 +178,7 @@ searchLocationInput.addEventListener('change', event => {
                              <div class="cities-saved-weather-box">
                                  <div class="city-saved-name">
                                       <p>${data.name}</p>
-                                      <div class="delete">-</div>
+                                      <div class="delete"onClick=deleteElement(this)>-</div>
                                 </div>
                                 <div class="city-saved-inf">
                                     <p>temp ${Math.round(data.main.temp)}°</p>
