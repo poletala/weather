@@ -130,7 +130,7 @@ function checkInput() {
         alert('Field is empty.')
         return false
     }
-    if (citiesSavedInLS.includes(cityName)) { //если введенный город есть на странице/////////////////////
+    if (citiesSavedInLS.includes(cityName)) { //если введенный город есть на странице
         alert(`${cityName} weather is on page.`)
         return false
     }

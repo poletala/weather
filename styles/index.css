@@ -25,7 +25,7 @@ main {
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-around;
- 
+  width: 100%;
 }
 .current-and-saved-cities-inf,
 .search-and-details {
@@ -241,6 +241,11 @@ form {
     align-items: center;
     gap: 20px;
   }
+/* @media (max-width: 1024px) {
+  .weather-details {
+    padding: 10px 87px 21px 78px;
+}
+  } */
 @media (max-width: 944px) {
   main {
     flex-direction: column;
@@ -250,12 +255,14 @@ form {
   .current-and-saved-cities-inf {
     margin: auto;
     width: 77%;
-  }
-  .search-and-details {
+}
+.search-and-details {
   margin: 2% 20%;
   width: 50%;
   }
 }
+
+
 @media (max-width: 867px) {
   .logo {
     top: 1%
@@ -272,8 +279,10 @@ form {
   }
   .search-and-details {
     height: 81%;
+    /* width: 71%; */
     margin-top: 43px;
   }
+
 }
 @media (max-width: 768px) {
   .current-and-saved-cities-inf {
@@ -281,17 +290,21 @@ form {
     margin: 79px auto 0 auto;
   }
   .city-saved-container {
+
     width: 237px;
-  }
-  .search-and-details {
+}
+.search-and-details {
   height: 82%;
   width: 60%;
   margin: 10px auto;
-  }
-  .side-information {
+}
+.side-information {
   margin-top: 20px;
   }
 }
+
+
+
 @media (max-width: 654px) {
   .current-and-saved-cities-inf {
     width: 80%;
@@ -307,62 +320,62 @@ form {
   }
   .current-and-saved-cities-inf {
     width: 89%;
-  }
+}
 }
 @media (max-width: 524px) {
   .current-and-saved-cities-inf {
     width: 94%;
-  }
+}
 }
 @media (max-width: 500px) {
   .city-saved-container {
     margin: auto;
     width: 257px;
     height: 45px;
-  }
-  .search-and-details {
+}
+.search-and-details {
   width: 94%;
   margin: 10px auto;
-  }
-  form {
+}
+form {
   width: 61%;
-  }
-  .weather-details {
+}
+.weather-details {
   gap: 24px;
-  }
-  details {
+}
+details {
   font-size: 18px;
-  }
-  .data-details {
+}
+.data-details {
   gap: 9px;
-  }
-  .weather-by-searching {
+}
+.weather-by-searching {
   font-size: 19px;
   padding: 17px 0 20px 49px;
-  }
-  form {
+}
+form {
   margin: 20px auto;
-  }
-  .cities-saved {
+}
+.cities-saved {
   margin-top: 17px;
-  }
-  .main-information {
+}
+.main-information {
   margin: auto;
   margin-top: 10px;
-  }
+}
 }
 @media (max-width: 406px) {
-  root {
+ root {
   width: 406px;
-  }
+ }
  .temp {
   width: 29%;
   font-size: 78px;
-  }
-  .time-date {
+}
+.time-date {
   font-size: 13px;
-  }
-  .location {
+}
+.location {
   font-size: 44px;
-  }
+}
 }
