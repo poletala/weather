@@ -80,11 +80,9 @@ function cityNameCorrectView(string) { //корректное написание
 function styleChange() {
     let citiesSavedInLS = JSON.parse(localStorage.getItem('Cities'))
     let citiesOnPage = document.querySelector('.cities-saved')
-    if (citiesSavedInLS) {
-        if (citiesSavedInLS.length >= 7) {
+    if (citiesSavedInLS && citiesSavedInLS.length >= 6) {
             document.querySelector('.main-information').style = 'order: 0'
             citiesOnPage.style = 'flex-direction: unset; height: unset'
-        }
     }
     if (!citiesSavedInLS) {
         console.log('LS is clear')
