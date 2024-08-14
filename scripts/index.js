@@ -8,6 +8,18 @@ const cloudy = document.querySelector('.cloudy')
 const wind = document.querySelector('.wind')
 const searchLocationInput = document.querySelector('.search-by-city')
 
+function deleteElement(elem) {
+    elem.closest('.city-saved-container').remove()
+    console.log(elem.closest('.city-saved-name').children[0].innerHTML)
+    let citiesSavedInLS = JSON.parse(localStorage.getItem('Cities'))
+    for (var i in citiesSavedInLS) {
+        if (elem.closest('.city-saved-name').children[0].innerHTML === citiesSavedInLS[i]) {
+            citiesSavedInLS.splice(i, 1);
+            localStorage.setItem('Cities', JSON.stringify(citiesSavedInLS));
+        }
+    }
+}
+
 const getCurrentTimeDate = () => {
     let currentTimeDate = new Date();
     let month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
@@ -35,34 +47,6 @@ function getWeatherByLocation(lat, lon) {
     const API_KEY = "6fbeb34c010c544f6f33fa8071fc677a"
     return appFetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&cnt=${'1'}&units=${'metric'}`)
 }
-
-function savedWeather() {
-    let citiesSavedInLS = JSON.parse(localStorage.getItem('Cities'))
-    console.log(citiesSavedInLS)
-    if(citiesSavedInLS) {
-        for (let i=0;i<citiesSavedInLS.length;i++) {
-            console.log(citiesSavedInLS[i])
-            getWeatherByCity(citiesSavedInLS[i])  
-                .then(data => {
-                    console.log(`${citiesSavedInLS[i]} ${Math.round(data.main.temp)}°`)
-                    let weatherSavedDiv = document.createElement('div')
-                    weatherSavedDiv.classList.add('cities-saved-weather-box')
-                    document.querySelector('.cities-saved').append(weatherSavedDiv)
-                    let citySavedP = document.createElement('p')
-                    let weatherSavedP = document.createElement('p')
-                    document.weatherSavedDiv.append(citySavedP)
-                    document.weatherSavedDiv.append(weatherSavedP)
-                    citySavedP.innerHTML = `${citiesSavedInLS[i]}`
-                    weatherSavedP.innerHTML = `$${Math.round(data.main.temp)}°`   
-            })
-            const onErrorCityName = (err) => {
-            console.log(err)
-            }
-        }   
-    }
-}
-savedWeather()
-
 function getWeatherByMyLocation() {
     const onSuccessLocation = (position) => {
         getWeatherByLocation(position.coords.latitude, position.coords.longitude)
@@ -75,11 +59,7 @@ function getWeatherByMyLocation() {
                 tempMin.innerHTML = `${Math.round(data.list[0].main.temp_min)}°`
                 humidity.innerHTML = `${data.list[0].main.humidity}%`
                 cloudy.innerHTML = `${data.list[0].clouds.all}%`
-                wind.innerHTML = `${data.list[0].wind.speed}km/h`
-                if (!JSON.parse(localStorage.getItem('Cities'))) {
-                    let citiesSaved = [data.city.name]
-                    localStorage.setItem('Cities', JSON.stringify(citiesSaved))
-                }      
+                wind.innerHTML = `${data.list[0].wind.speed}km/h`    
         })
     }
     const onErrorLocation = (err) => {
@@ -89,14 +69,69 @@ function getWeatherByMyLocation() {
 }
 window.onload = getWeatherByMyLocation
 
+function cityNameCorrectView(string) { //корректное написание городов
+    let correctArrayOfCityName = []
+    let cityName = string.split(' ')
+    for (let i=0;i<cityName.length;i++) {
+        correctArrayOfCityName.push(cityName[i].trim().toLowerCase().charAt(0).toUpperCase() + cityName[i].slice(1))
+    }
+    return correctArrayOfCityName.join(' ')
+}
+
+function savedWeather() { //отображение погоды для городов из хранилища
+    let citiesSavedInLS = JSON.parse(localStorage.getItem('Cities'))
+    let citiesOnPage = document.querySelector('.cities-saved')
+    if (citiesSavedInLS.length >= 8) {
+        document.querySelector('.main-information').style = 'order: 0'
+        citiesOnPage.style = 'flex-direction: unset; height: unset'
+    }
+    console.log(citiesSavedInLS)
+    if(citiesSavedInLS) {
+        for (let i=0;i<citiesSavedInLS.length;i++) {
+            console.log(citiesSavedInLS[i])
+            getWeatherByCity(citiesSavedInLS[i])  
+                .then(data => {
+                    console.log(`${citiesSavedInLS[i]} temp ${Math.round(data.main.temp)}° wind ${data.wind.speed}`)
+                    let weatherIcon = (data.weather.main === 'Snow') ? 'snow' :
+                            (data.weather.main === 'Rain') ? 'rain' :
+                            (data.weather.main === 'Clouds') ? 'cloud' : 'sun';
+                    let htmlSavedCityBox = `<div class="city-saved-container">
+                            <div class="weather-icon ${weatherIcon}"></div>
+                            <div class="cities-saved-weather-box">
+                                <div class="city-saved-name">
+                                    <p>${data.name}</p>
+                                    <div class="delete" onClick=deleteElement(this)>-</div>
+                                </div>
+                                <div class="city-saved-inf">
+                                    <p>temp ${Math.round(data.main.temp)}°</p>
+                                    <p>wind ${data.wind.speed}km/h</p>
+                                </div>
+                            </div>
+                        </div>`
+                    citiesOnPage.insertAdjacentHTML('beforeend', htmlSavedCityBox)
+            })
+            const onErrorCityName = (err) => {
+            console.log(err)
+            }
+        }   
+    }
+}
+savedWeather()
+
 function getWeatherByCity(city) {
     const API_KEY = "6fbeb34c010c544f6f33fa8071fc677a"
     return appFetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=${'metric'}`)
 }
 
 function checkInput() {
+    let citiesSavedInLS = JSON.parse(localStorage.getItem('Cities'))
+    let cityName = cityNameCorrectView(searchLocationInput.value)
     if (!searchLocationInput.value) {
         alert('Field is empty.')
+        return false
+    }
+    if (citiesSavedInLS.includes(cityName)) { //если введенный город есть на странице/////////////////////
+        alert(`${cityName} weather is on page.`)
         return false
     }
     else return true
@@ -104,12 +139,11 @@ function checkInput() {
 
 searchLocationInput.addEventListener('change', event => {
     let citiesSavedInLS = JSON.parse(localStorage.getItem('Cities'))
+    let citiesOnPage = document.querySelector('.cities-saved')
     if (checkInput()) {
-    let cityName = searchLocationInput.value.trim().toLowerCase()
-    cityName = cityName.charAt(0).toUpperCase() + cityName.slice(1)
-    document.querySelector('.weather-by-searching').innerHTML = `Weather in ${cityName}`
-    console.log(`Weather in ${cityName}`)
-    
+    let cityName = cityNameCorrectView(searchLocationInput.value)
+    document.querySelector('.weather-by-searching').innerHTML = `Weather in ${cityName}`//////
+    console.log(`Search weather in ${cityName}`)
     getWeatherByCity(cityName)
         .then(data => {
             console.log(data)
@@ -118,37 +152,41 @@ searchLocationInput.addEventListener('change', event => {
             humidity.innerHTML = `${data.main.humidity}%`
             cloudy.innerHTML = `${data.clouds.all}%`
             wind.innerHTML = `${data.wind.speed}km/h`   
-            if (citiesSavedInLS.length < 6) {
-                citiesSavedInLS.push(cityName)
-                localStorage.setItem('Cities', JSON.stringify(citiesSavedInLS))
+            let weatherIcon = (data.weather.main === 'Snow') ? 'snow' :
+                             (data.weather.main === 'Rain') ? 'rain' :
+                              (data.weather.main === 'Clouds') ? 'cloud' :
+                              (data.weather.main === 'Clear') ? 'sun' : 'sun';
+                        let htmlSavedCityBox = `<div class="city-saved-container">
+                             <div class="weather-icon ${weatherIcon}"></div>
+                             <div class="cities-saved-weather-box">
+                                 <div class="city-saved-name">
+                                      <p>${data.name}</p>
+                                      <div class="delete">-</div>
+                                </div>
+                                <div class="city-saved-inf">
+                                    <p>temp ${Math.round(data.main.temp)}°</p>
+                                    <p>wind ${data.wind.speed}km/h</p>
+                                </div>
+                            </div>
+                            </div>`
+                        citiesOnPage.insertAdjacentHTML('beforeend', htmlSavedCityBox)
+            if (!citiesSavedInLS) {
+                citiesSavedInLS = [cityName]
+                localStorage.setItem('Cities', JSON.stringify(citiesSavedInLS)) 
             }
-            if (citiesSavedInLS.length > 6) {
-                let usersAnswer = confirm(`You can only keep six cities' weather information. Do you want to delete first?`)
-                if(usersAnswer) {
-                    citiesSavedInLS.shift()
-                    citiesSavedInLS.push(cityName)
-                    localStorage.setItem('Cities', JSON.stringify(citiesSavedInLS))
-                } else {
-                    alert(`${cityName}' weather will not be saved.`)
-                }
+            if (citiesSavedInLS) {
+                citiesSavedInLS.push(cityName)
+                let uniqCitiesSavedInLS = [ ...new Set(citiesSavedInLS) ]
+                localStorage.setItem('Cities', JSON.stringify(uniqCitiesSavedInLS))
+            }
+            if (citiesSavedInLS.length === 8) {
+                document.querySelector('.main-information').style = 'order: 0'
             }
         })
         const onErrorCityName = (err) => {
         console.log(err)
-        alert('Wrong city name.')
         }
-}})
+       
+        searchLocationInput.value = ''    
+    }})
 
-
-function mainInfStyle() {
-    let citiesSavedInLS = JSON.parse(localStorage.getItem('Cities'))
-    if (!citiesSavedInLS) {
-        document.querySelector('.main-information').style.bottom = '200px'
-    } 
-    if (citiesSavedInLS) {
-        if (citiesSavedInLS.length < 4) {
-        document.querySelector('.main-information').style.bottom = '200px'
-        }
-    }
-}
-mainInfStyle()
