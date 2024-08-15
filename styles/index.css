@@ -50,10 +50,9 @@ main {
 }
 .cities-saved {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 10px;
   flex-wrap: wrap;
-  height: 38%;
   order: 1;
 }
 .city-saved-container {
@@ -246,7 +245,7 @@ form {
     padding: 10px 87px 21px 78px;
 }
   } */
-@media (max-width: 944px) {
+@media (max-width: 945px) {
   main {
     flex-direction: column;
     flex-wrap: unset;
@@ -254,13 +253,21 @@ form {
   }
   .current-and-saved-cities-inf {
     margin: auto;
-    width: 77%;
-}
-.search-and-details {
+    width: 57%;
+  }
+  .search-and-details {
   margin: 2% 20%;
   width: 50%;
   }
+  .main-information {
+    order: 0;
+  }
+  .cities-saved {
+    flex-direction: row;
+    height: unset;
 }
+}
+
 
 
 @media (max-width: 867px) {
@@ -274,9 +281,6 @@ form {
     width: 61%;
     height: fit-content;
   }
-  .cities-saved {
-    height: 67%;
-  }
   .search-and-details {
     height: 81%;
     /* width: 71%; */
@@ -284,14 +288,14 @@ form {
   }
 
 }
-@media (max-width: 768px) {
+@media (max-width: 772px) {
   .current-and-saved-cities-inf {
     width: 72%;
-    margin: 79px auto 0 auto;
+    margin: 20px auto 0 auto;
   }
   .city-saved-container {
 
-    width: 237px;
+    width: 218px;
 }
 .search-and-details {
   height: 82%;
@@ -301,14 +305,48 @@ form {
 .side-information {
   margin-top: 20px;
   }
-}
 
+}
+@media (max-width: 654px) {
+  .weather-by-searching {
+    font-size: 21px;
+    padding: 18px 0 20px 35px;
+}
+}
 
 
 @media (max-width: 654px) {
   .current-and-saved-cities-inf {
     width: 80%;
   }
+}
+@media (max-width: 587px) {
+  .city-saved-container {
+    width: 212px;
+}
+.temp {
+  font-size: 100px;
+  width: 32%;
+}
+.location {
+  font-size: 58px;
+}
+.time-date {
+  font-size: 16px;
+}
+.main-information {
+  margin: auto;
+}
+.weather-details {
+  gap: 26px;
+  padding: 20px 54px 20px 55px;
+}
+.details {
+  font-size: 17px;
+}
+.search-and-details {
+  width: 70%;
+}
 }
 @media (max-width: 572px) {
   .temp {
@@ -322,6 +360,7 @@ form {
     width: 89%;
 }
 }
+
 @media (max-width: 524px) {
   .current-and-saved-cities-inf {
     width: 94%;
@@ -342,6 +381,7 @@ form {
 }
 .weather-details {
   gap: 24px;
+  padding: 16px 68px 20px 89px;
 }
 details {
   font-size: 18px;
@@ -362,6 +402,13 @@ form {
 .main-information {
   margin: auto;
   margin-top: 10px;
+}
+.temp {
+  width: 25%;
+  font-size: 75px;
+}
+.location {
+  font-size: 53px;
 }
 }
 @media (max-width: 406px) {

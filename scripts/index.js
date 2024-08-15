@@ -198,7 +198,7 @@ searchLocationInput.addEventListener('change', event => {
                 let uniqCitiesSavedInLS = [ ...new Set(citiesSavedInLS) ]
                 localStorage.setItem('Cities', JSON.stringify(uniqCitiesSavedInLS))
             }
-            if (citiesSavedInLS.length === 8) {
+            if (citiesSavedInLS.length === 6) {
                 document.querySelector('.main-information').style = 'order: 0'
             }
         })
