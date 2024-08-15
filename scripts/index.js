@@ -12,12 +12,15 @@ function deleteElement(elem) {
     elem.closest('.city-saved-container').remove()
     console.log(elem.closest('.city-saved-name').children[0].innerHTML)
     let citiesSavedInLS = JSON.parse(localStorage.getItem('Cities'))
-    for (var i in citiesSavedInLS) {
+    if (citiesSavedInLS.length === 1) {
+        citiesSavedInLS.shift()
+    } else {
+    for (let i=0; i<citiesSavedInLS.length; i++) {
         if (elem.closest('.city-saved-name').children[0].innerHTML === citiesSavedInLS[i]) {
-            citiesSavedInLS.splice(i, 1);
-            localStorage.setItem('Cities', JSON.stringify(citiesSavedInLS));
+                citiesSavedInLS.splice(i, 1);
         }
-    }
+    }}
+    localStorage.setItem('Cities', JSON.stringify(citiesSavedInLS));
 }
 
 const getCurrentTimeDate = () => {
@@ -157,11 +160,12 @@ searchLocationInput.addEventListener('change', event => {
     let citiesOnPage = document.querySelector('.cities-saved')
     if (checkInput()) {
     let cityName = cityNameCorrectView(searchLocationInput.value)
-    document.querySelector('.weather-by-searching').innerHTML = `Weather in ${cityName}`
+   
     console.log(`Search weather in ${cityName}`)
     getWeatherByCity(cityName)
         .then(data => {
             console.log(data)
+            document.querySelector('.weather-by-searching').innerHTML = `Weather in ${data.name}`
             tempMax.innerHTML = `${Math.round(data.main.temp_max)}°`
             tempMin.innerHTML = `${Math.round(data.main.temp_min)}°`
             humidity.innerHTML = `${data.main.humidity}%`
