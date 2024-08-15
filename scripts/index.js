@@ -209,3 +209,15 @@ searchLocationInput.addEventListener('change', event => {
         searchLocationInput.value = ''    
     }})
 
+function weatherBackground(weather) {
+        const CLIENT_ID = "GPouIOD-7p_txw_b0TOF8OhIOeHamqoOxRX-V5Q2nac"
+        return appFetch(`https://api.unsplash.com/photos/random/?query=${weather}&client_id=${CLIENT_ID}`)
+}
+function getWeatherPhoto() {
+
+weatherBackground('rain')
+            .then(data => {
+                console.log(`UNPLASH ${data}`)
+        })
+}
+    getWeatherPhoto()
