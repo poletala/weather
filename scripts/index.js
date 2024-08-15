@@ -12,7 +12,7 @@ function deleteElement(elem) {
     elem.closest('.city-saved-container').remove()
     console.log(elem.closest('.city-saved-name').children[0].innerHTML)
     let citiesSavedInLS = JSON.parse(localStorage.getItem('Cities'))
-    if (citiesSavedInLS.length === 1) {
+    if (elem.closest('.city-saved-name').children[0].innerHTML === citiesSavedInLS[0]) {
         citiesSavedInLS.shift()
     } else {
     for (let i=0; i<citiesSavedInLS.length; i++) {
