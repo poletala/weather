@@ -217,7 +217,7 @@ function getWeatherPhoto() {
 
 weatherBackground('rain')
             .then(data => {
-                console.log(`UNPLASH ${data}`)
+                console.log(data)
         })
 }
     getWeatherPhoto()
