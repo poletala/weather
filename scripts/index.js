@@ -8,6 +8,7 @@ const cloudy = document.querySelector('.cloudy')
 const wind = document.querySelector('.wind')
 const searchLocationInput = document.querySelector('.search-by-city')
 
+
 function deleteElement(elem) {
     elem.closest('.city-saved-container').remove()
     console.log(elem.closest('.city-saved-name').children[0].innerHTML)
@@ -63,6 +64,8 @@ function getWeatherByMyLocation() {
                 humidity.innerHTML = `${data.list[0].main.humidity}%`
                 cloudy.innerHTML = `${data.list[0].clouds.all}%`
                 wind.innerHTML = `${data.list[0].wind.speed}km/h`    
+                localStorage.setItem('WeatherByLocation', JSON.stringify(data.list[0].weather[0].description)) 
+                getWeatherPhoto()
         })
     }
     const onErrorLocation = (err) => {
@@ -209,15 +212,26 @@ searchLocationInput.addEventListener('change', event => {
         searchLocationInput.value = ''    
     }})
 
-function weatherBackground(weather) {
+function weatherBackground(string) {
         const CLIENT_ID = "GPouIOD-7p_txw_b0TOF8OhIOeHamqoOxRX-V5Q2nac"
-        return appFetch(`https://api.unsplash.com/photos/random/?query=${weather}&client_id=${CLIENT_ID}`)
+        return appFetch(`https://api.unsplash.com/photos/random/?query=${string}&client_id=${CLIENT_ID}`)
 }
-function getWeatherPhoto() {
 
-weatherBackground('rain')
+function getWeatherPhoto() {
+    let weatherByLocationInLS = JSON.parse(localStorage.getItem('WeatherByLocation'))
+    // console.log(weatherByLocationInLS)
+    let weatherByLocation = (weatherByLocationInLS) ? weatherByLocationInLS : '';
+    console.log(`${weatherByLocation} weather city`)
+    weatherBackground(`${weatherByLocation}`)
             .then(data => {
-                console.log(data)
+                document.querySelector("body").style = `background: url(${data.urls.regular})`
         })
 }
-    getWeatherPhoto()
+// getWeatherPhoto()
+
+// function slideShow() {
+//     setInterval(() => {
+//         getWeatherPhoto()
+//     }, 5000);
+//   }
+//   slideShow()

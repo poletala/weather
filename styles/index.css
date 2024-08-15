@@ -3,7 +3,11 @@ body, p {
     margin: 0;
 }
 body {
-  background: rgb(122, 206, 212);
+  background-color: rgb(122, 206, 212);
+  /*  */
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
+  transition: all 1s;
 }
 root {
     position: relative;
@@ -19,6 +23,27 @@ root {
     top: 4%;
     left: 7%;
     background-image: url(../assets/logo.svg);
+}
+.slideshow {
+  position: absolute;
+  top: 5%;
+  left: 16%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Roboto;
+  font-size: 18px;
+  font-weight: 400;
+  border: 1px solid white;
+  border-radius: 50%;
+  width: 22px;
+  height: 20px;
+  cursor: pointer;
+  mix-blend-mode: difference;
+  filter: invert(1);
+}
+.slideshow:hover {
+  border: 2px solid white;
 }
 main {
     display: flex;
@@ -66,6 +91,7 @@ main {
   cursor: pointer;
   position: relative;
   /* display: none; */
+  backdrop-filter: blur(50px);
 }
 .weather-icon{
   border-radius: 50%;
@@ -132,6 +158,7 @@ main {
   position: absolute;
   top: 11px;
   right: 8px;
+  cursor: pointer;
 }
 .delete:hover {
   border: 2px solid white;
@@ -139,7 +166,7 @@ main {
 .side-information {
     display: flex;
     flex-direction: column;
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(15px);
 
 }
 .temp {
@@ -148,7 +175,8 @@ main {
     font-size: 143px;
     font-weight: 400;
     text-align: left;
-    color: white;
+    mix-blend-mode: difference;
+    filter: invert(1);
 }
 .location-date-box {
     display: flex;
@@ -162,14 +190,18 @@ main {
     font-size: 65px;
     font-weight: 400;
     text-align: left;
-    color: white;
+    /* color: white; */
+    /*  */
+    mix-blend-mode: difference;
+    filter: invert(1);
 }
 .time-date {
     font-family: Roboto;
     font-size: 18px;
     font-weight: 400;
     text-align: left;
-    color: white;
+    mix-blend-mode: difference;
+    filter: invert(1);
 }
 form {
     position: relative;
