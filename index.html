@@ -16,105 +16,7 @@
             <main>
                 <div class="current-and-saved-cities-inf">
                     <div class="cities-saved">
-                        <!-- <div class="city-saved-container">
-                            <div class="weather-icon"></div>
-                            <div class="cities-saved-weather-box">
-                                <div class="city-saved-name">
-                                    <p>Moscow</p>
-                                    <div class="delete">-</div>
-                                </div>
-                                <div class="city-saved-inf">
-                                    <p>temp 16°</p>
-                                    <p>wind 5 km/h</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="city-saved-container">
-                            <div class="weather-icon"></div>
-                            <div class="cities-saved-weather-box">
-                                <div class="city-saved-name">
-                                    <p>Moscow</p>
-                                    <div class="delete">-</div>
-                                </div>
-                                <div class="city-saved-inf">
-                                    <p>temp 16°</p>
-                                    <p>wind 5 km/h</p>
-                                </div>
-                            </div>
-                        </div><div class="city-saved-container"> -->
-                            <!-- <div class="weather-icon"></div>
-                            <div class="cities-saved-weather-box">
-                                <div class="city-saved-name">
-                                    <p>Saint Petersburg</p>
-                                    <div class="delete">-</div>
-                                </div>
-                                <div class="city-saved-inf">
-                                    <p>temp -25°</p>
-                                    <p>wind 5 km/h</p>
-                                </div>
-                            </div> -->
-                        <!-- </div><div class="city-saved-container">
-                            <div class="weather-icon"></div>
-                            <div class="cities-saved-weather-box">
-                                <div class="city-saved-name">
-                                    <p>Nizhniy Novgorod</p>
-                                    <div class="delete">-</div>
-                                </div>
-                                <div class="city-saved-inf">
-                                    <p>temp 16°</p>
-                                    <p>wind 5 km/h</p>
-                                </div>
-                            </div>
-                        </div><div class="city-saved-container">
-                            <div class="weather-icon"></div>
-                            <div class="cities-saved-weather-box">
-                                <div class="city-saved-name">
-                                    <p>Ekaterinburg</p>
-                                    <div class="delete">-</div>
-                                </div>
-                                <div class="city-saved-inf">
-                                    <p>temp 1°</p>
-                                    <p>wind 25 km/h</p>
-                                </div>
-                            </div>
-                        </div><div class="city-saved-container">
-                            <div class="weather-icon"></div>
-                            <div class="cities-saved-weather-box">
-                                <div class="city-saved-name">
-                                    <p>Moscow</p>
-                                    <div class="delete">-</div>
-                                </div>
-                                <div class="city-saved-inf">
-                                    <p>temp 16°</p>
-                                    <p>wind 5 km/h</p>
-                                </div>
-                            </div>
-                        </div><div class="city-saved-container">
-                            <div class="weather-icon"></div>
-                            <div class="cities-saved-weather-box">
-                                <div class="city-saved-name">
-                                    <p>Moscow</p>
-                                    <div class="delete">-</div>
-                                </div>
-                                <div class="city-saved-inf">
-                                    <p>temp 16°</p>
-                                    <p>wind 5 km/h</p>
-                                </div>
-                            </div>
-                        </div><div class="city-saved-container">
-                            <div class="weather-icon"></div>
-                            <div class="cities-saved-weather-box">
-                                <div class="city-saved-name">
-                                    <p>Moscow</p>
-                                    <div class="delete">-</div>
-                                </div>
-                                <div class="city-saved-inf">
-                                    <p>temp 16°</p>
-                                    <p>wind 5 km/h</p>
-                                </div>
-                            </div>
-                    </div> -->
-                </div>
+                    </div>
                     <div class="main-information">
                         <div class="temp"> 16°
                         </div>
@@ -127,6 +29,8 @@
                     </div>
                 </div>
                 <div class="search-and-details">
+                    <div class="error">The entered city does not exist. Please check the spelling of the city.
+                        <span class="ok-button" onclick="errorDelete()">ok</span></div>
                     <div class="side-information">
                         <form onsubmit="return false">
                             <input type="text" placeholder="Search Location..." class="search-by-city">
@@ -176,7 +80,6 @@
                     </div>
                 </div>
             </main>
-            
         </root>
     <script src="./scripts/index.js"></script>
     </body>

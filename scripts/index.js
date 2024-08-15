@@ -40,11 +40,24 @@ const getCurrentTimeDate = () => {
 }
 getCurrentTimeDate()
 
+// function appFetch(url, options) {
+//     return fetch(url, options)
+//     .then(resp => resp.json())
+//     .catch(err => {
+//         throw new Error(err)
+//     })
+// }
 function appFetch(url, options) {
     return fetch(url, options)
-    .then(resp => resp.json())
-    .catch(err => {
-        throw new Error(err)
+    .then(response => {
+        if (response.ok) {
+            return response.json()
+        } else if (response.status === 404) {
+            document.querySelector('.error').style = "display: flex" //окно ошибки на странице
+            // return Promise.reject('Error 404')
+        } else {
+            return Promise.reject('some other error: ' + response.status)
+        }
     })
 }
 function getWeatherByLocation(lat, lon) {
@@ -65,7 +78,11 @@ function getWeatherByMyLocation() {
                 cloudy.innerHTML = `${data.list[0].clouds.all}%`
                 wind.innerHTML = `${data.list[0].wind.speed}km/h`    
                 localStorage.setItem('WeatherByLocation', JSON.stringify(data.list[0].weather[0].description)) 
-                getWeatherPhoto()
+                getWeatherPhoto() //фон
+                temp.style = 'mix-blend-mode: difference;filter: invert(1);color: unset;'//меняем стиль текста для видимости
+                mylocation.style = 'mix-blend-mode: difference;filter: invert(1);color: unset;'
+                date.style = 'mix-blend-mode: difference;filter: invert(1);color: unset;'
+                document.querySelector('.slideshow').style = 'mix-blend-mode: difference;filter: invert(1);color: unset;'
         })
     }
     const onErrorLocation = (err) => {
@@ -83,7 +100,7 @@ function cityNameCorrectView(string) { //корректное написание
     }
     return correctArrayOfCityName.join(' ')
 }
-function styleChange() {
+function styleChange() { //смена порядка элементов при кол-ве городов 6
     let citiesSavedInLS = JSON.parse(localStorage.getItem('Cities'))
     let citiesOnPage = document.querySelector('.cities-saved')
     if (citiesSavedInLS && citiesSavedInLS.length >= 6) {
@@ -162,23 +179,22 @@ searchLocationInput.addEventListener('change', event => {
     let citiesSavedInLS = JSON.parse(localStorage.getItem('Cities'))
     let citiesOnPage = document.querySelector('.cities-saved')
     if (checkInput()) {
-    let cityName = cityNameCorrectView(searchLocationInput.value)
-   
-    console.log(`Search weather in ${cityName}`)
-    getWeatherByCity(cityName)
-        .then(data => {
-            console.log(data)
-            document.querySelector('.weather-by-searching').innerHTML = `Weather in ${data.name}`
-            tempMax.innerHTML = `${Math.round(data.main.temp_max)}°`
-            tempMin.innerHTML = `${Math.round(data.main.temp_min)}°`
-            humidity.innerHTML = `${data.main.humidity}%`
-            cloudy.innerHTML = `${data.clouds.all}%`
-            wind.innerHTML = `${data.wind.speed}km/h`   
-            let weatherIcon = (data.weather[0].main === 'Snow') ? 'snow' :
+        let cityName = cityNameCorrectView(searchLocationInput.value)
+        console.log(`Search weather in ${cityName}`)
+        getWeatherByCity(cityName)
+            .then(data => {
+                console.log(data)
+                document.querySelector('.weather-by-searching').innerHTML = `Weather in ${data.name}`
+                tempMax.innerHTML = `${Math.round(data.main.temp_max)}°`
+                tempMin.innerHTML = `${Math.round(data.main.temp_min)}°`
+                humidity.innerHTML = `${data.main.humidity}%`
+                cloudy.innerHTML = `${data.clouds.all}%`
+                wind.innerHTML = `${data.wind.speed}km/h`   
+                let weatherIcon = (data.weather[0].main === 'Snow') ? 'snow' :
                              (data.weather[0].main === 'Rain') ? 'rain' :
                               (data.weather[0].main === 'Clouds') ? 'cloud' :
                               (data.weather[0].main === 'Clear') ? 'sun' : 'cloud';
-                        let htmlSavedCityBox = `<div class="city-saved-container">
+                let htmlSavedCityBox = `<div class="city-saved-container">
                              <div class="weather-icon ${weatherIcon}"></div>
                              <div class="cities-saved-weather-box">
                                  <div class="city-saved-name">
@@ -191,40 +207,41 @@ searchLocationInput.addEventListener('change', event => {
                                 </div>
                             </div>
                             </div>`
-                        citiesOnPage.insertAdjacentHTML('beforeend', htmlSavedCityBox)
-            if (!citiesSavedInLS) {
-                citiesSavedInLS = [cityName]
-                localStorage.setItem('Cities', JSON.stringify(citiesSavedInLS)) 
-            }
-            if (citiesSavedInLS) {
-                citiesSavedInLS.push(cityName)
-                let uniqCitiesSavedInLS = [ ...new Set(citiesSavedInLS) ]
-                localStorage.setItem('Cities', JSON.stringify(uniqCitiesSavedInLS))
-            }
-            if (citiesSavedInLS.length === 6) {
-                document.querySelector('.main-information').style = 'order: 0'
-            }
-        })
+                citiesOnPage.insertAdjacentHTML('beforeend', htmlSavedCityBox)
+                if (!citiesSavedInLS) {
+                    citiesSavedInLS = [cityName]
+                    localStorage.setItem('Cities', JSON.stringify(citiesSavedInLS)) 
+                }
+                if (citiesSavedInLS) {
+                    citiesSavedInLS.push(cityName)
+                    let uniqCitiesSavedInLS = [ ...new Set(citiesSavedInLS) ]
+                    localStorage.setItem('Cities', JSON.stringify(uniqCitiesSavedInLS))
+                }
+                if (citiesSavedInLS.length === 6) {
+                    document.querySelector('.main-information').style = 'order: 0'
+                }
+            })
         const onErrorCityName = (err) => {
-        console.log(err)
+            console.log(err)
         }
-       
         searchLocationInput.value = ''    
-    }})
+}})
 
 function weatherBackground(string) {
         const CLIENT_ID = "GPouIOD-7p_txw_b0TOF8OhIOeHamqoOxRX-V5Q2nac"
-        return appFetch(`https://api.unsplash.com/photos/random/?query=${string}&client_id=${CLIENT_ID}`)
+        return appFetch(`https://api.unsplash.com/photos/random/?query=${string}&orientation=landscape&client_id=${CLIENT_ID}`)
 }
 
 function getWeatherPhoto() {
+    let cityByLocation = document.querySelector('.location').innerHTML
     let weatherByLocationInLS = JSON.parse(localStorage.getItem('WeatherByLocation'))
     // console.log(weatherByLocationInLS)
-    let weatherByLocation = (weatherByLocationInLS) ? weatherByLocationInLS : '';
-    console.log(`${weatherByLocation} weather city`)
-    weatherBackground(`${weatherByLocation}`)
+    // let weatherByLocation = (weatherByLocationInLS) ? weatherByLocationInLS : '';
+    console.log(`${cityByLocation}`)
+    weatherBackground(`dark ${cityByLocation} city photo`) //запрос на картинку
             .then(data => {
-                document.querySelector("body").style = `background: url(${data.urls.regular})`
+                console.log(data)
+                document.querySelector("body").style = `background-image: url(${data.urls.regular})`
         })
 }
 // getWeatherPhoto()
@@ -235,3 +252,7 @@ function getWeatherPhoto() {
 //     }, 5000);
 //   }
 //   slideShow()
+
+function errorDelete() { //убираем окно в ошибкой
+    document.querySelector('.error').style.display = 'none'
+}
